@@ -4,6 +4,7 @@ const todoInput = document.getElementById('todo-input');
 const todoList = document.getElementById('todo-list');
 
 let todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+let lastAddedId = '';
 
 function saveTodos() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
@@ -18,7 +19,7 @@ function renderTodos() {
   todoList.innerHTML = todos
     .map(
       (todo) => `
-        <li class="todo-item ${todo.completed ? 'completed' : ''}">
+        <li class="todo-item ${todo.completed ? 'completed' : ''} ${todo.id === lastAddedId ? 'animate-in' : ''}">
           <div class="todo-left">
             <input
               class="todo-checkbox"
@@ -36,16 +37,19 @@ function renderTodos() {
 }
 
 function addTodo(text) {
+  const id = Date.now().toString();
   todos.unshift({
-    id: Date.now().toString(),
+    id,
     text,
     completed: false,
   });
+  lastAddedId = id;
   saveTodos();
   renderTodos();
 }
 
 function toggleTodo(id) {
+  lastAddedId = '';
   todos = todos.map((todo) =>
     todo.id === id ? { ...todo, completed: !todo.completed } : todo
   );
@@ -54,6 +58,7 @@ function toggleTodo(id) {
 }
 
 function deleteTodo(id) {
+  lastAddedId = '';
   todos = todos.filter((todo) => todo.id !== id);
   saveTodos();
   renderTodos();
