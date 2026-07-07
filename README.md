@@ -1,4 +1,4 @@
-# Todo List App
+# Todo List website (First Project)
 
 A simple, lightweight todo list web app built with HTML, CSS, and JavaScript.
 
